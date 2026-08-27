@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Persistent Web Skills Runtime",
+  "version": "0.1.0",
+  "description": "Discover native WebMCP tools, persist learned web skills, and inspect runtime repair.",
+  "permissions": ["activeTab", "storage", "sidePanel", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background/index.js"
+  },
+  "action": {
+    "default_title": "Open Persistent Web Skills Runtime"
+  },
+  "side_panel": {
+    "default_path": "inspector.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/webmcp-bridge.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/index.js"],
+      "run_at": "document_start",
+      "world": "ISOLATED"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
