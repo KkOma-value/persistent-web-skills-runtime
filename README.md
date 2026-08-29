@@ -6,6 +6,8 @@ This hackathon MVP demonstrates the complete runtime loop:
 
 `Native WebMCP → Cached Web Skill → Browser/DOM Learn → IndexedDB → Fingerprint Detect → Local Repair`
 
+**Live demo:** [persistent-web-skills-runtime.vercel.app](https://persistent-web-skills-runtime.vercel.app)
+
 The built-in `taskboard.local` demo provides:
 
 - a native `search_tasks()` WebMCP tool on page load;

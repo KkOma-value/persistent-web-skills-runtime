@@ -79,7 +79,7 @@ The automated coverage includes WebMCP discovery and rebinding, tool-change sync
 
 ## Public Demo Link
 
-**TODO — required before final submission.** The working demo is currently local only. Deploy the Vite app to a public HTTPS URL that judges can open in ChatGPT's in-app browser or Chrome with WebMCP enabled.
+The working demo is available at [persistent-web-skills-runtime.vercel.app](https://persistent-web-skills-runtime.vercel.app). It is a public HTTPS Vite deployment and can be opened in Chrome or ChatGPT's in-app browser.
 
 ## Public Repository Link
 
@@ -87,7 +87,7 @@ The source code is public at [KkOma-value/persistent-web-skills-runtime](https:/
 
 ## Demo Video
 
-**TODO — required before final submission.** Publish a public YouTube video under three minutes, with audio, covering:
+Two local 30-second demo videos with audio are ready: an English-narration cut and a Chinese-narration cut. Publish the English cut as a public YouTube video under three minutes before final submission:
 
 1. The problem: agents repeatedly relearn brittle browser workflows.
 2. The priority ladder: Native WebMCP → Cached Skill → Browser/DOM learning.
@@ -115,7 +115,7 @@ The core application, tests, build, and a local interactive proof are ready. The
 
 ## Known Limitations
 
-- The public live deployment, public source repository, public YouTube demo, and Devpost thumbnail are not yet available.
+- The public live deployment, public source repository, and Devpost thumbnail are available. The remaining required media is a public YouTube demo.
 - The deterministic taskboard demo uses a WebMCP-compatible `document.modelContext` harness so the behavior is reproducible even when the experimental browser API is unavailable.
 - The optional AI service requires server-side configuration; local semantic repair remains available without it.
 - The current MVP covers a focused taskboard workflow rather than arbitrary multi-site automation.
@@ -133,12 +133,12 @@ The core application, tests, build, and a local interactive proof are ready. The
 
 - **Submitter Type:** `Individual`.
 - **Country of residence of yourself and team members if applicable:** TODO — enter directly on Devpost after confirming eligibility; do not place private residence data in this repository.
-- **App Status:** Proposed answer: `New`. Please confirm this is correct. If the project existed before the submission period, select `Existing` and document the WebMCP work added during the submission period.
-- **If Existing, explain updates:** Leave blank only if `New` is confirmed. Otherwise, describe the meaningful WebMCP extension with dated evidence.
-- **Live URL:** TODO — add the deployed HTTPS URL.
+- **App Status:** `New`.
+- **If Existing, explain updates:** Not applicable.
+- **Live URL:** https://persistent-web-skills-runtime.vercel.app
 - **Testing instructions:** Use the testing instructions above; add credentials only if a future deployment requires them.
 - **Public code repository:** https://github.com/KkOma-value/persistent-web-skills-runtime (public; MIT License).
 - **Which agents or clients did you test your WebMCP tools with?:** Google Chrome local demo, the Chrome MV3 extension path, and deterministic automated WebMCP runtime tests. The local demo verifies native `search_tasks()`, live `toolchange` synchronization, current-tool rebinding, semantic workflow reuse, result validation, and a v1 → v2 repair.
 - **Which AI tools have you leveraged?:** OpenAI Codex for planning, implementation, testing, and iteration; an OpenAI-compatible Responses API for optional server-side skill drafting and failed-step repair.
-- **Level of learning derived:** Proposed answer: `Significant`. TODO — confirm this is your answer.
-- **Did you gain AI value usable in your career?:** Proposed answer: `Yes`. TODO — confirm this is your answer.
+- **Level of learning derived:** `Significant`.
+- **Did you gain AI value usable in your career?:** `Yes`. As an agent engineer, I repeatedly test browser automation across many fresh pages and have been looking for a way to let agents achieve stronger results with fewer tokens. WebMCP made the path clear: expose useful structured tools, preserve proven workflows as reusable skills, and give agents an answer they can safely reuse instead of forcing them to rediscover the UI. After first hearing about WebMCP from Google engineers at Google I/O, building this project made the practical value click for me: native tools plus durable, inspectable skill memory can make agent browser work faster, more reliable, and easier to trust.
