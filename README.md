@@ -71,3 +71,7 @@ npm run build
 ```
 
 The tests cover WebMCP discovery/rebinding and diffs, semantic locator priority, dependency-only fingerprints, explicit validation, IndexedDB version history, native-first catalog resolution, and the end-to-end Learn/Reuse/Repair orchestration.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

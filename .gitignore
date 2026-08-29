@@ -7,3 +7,6 @@ coverage/
 *.log
 .DS_Store
 .idea/
+.vercel/
+.devpost-hackathon-state.json
+artifacts/
