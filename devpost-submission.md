@@ -83,7 +83,7 @@ The automated coverage includes WebMCP discovery and rebinding, tool-change sync
 
 ## Public Repository Link
 
-**TODO — required before final submission.** The code is currently at [KkOma-value/persistent-web-skills-runtime](https://github.com/KkOma-value/persistent-web-skills-runtime), but that repository is currently private and has no open-source license. It must be made public and include a visible open-source license before being used in the Devpost submission.
+The source code is public at [KkOma-value/persistent-web-skills-runtime](https://github.com/KkOma-value/persistent-web-skills-runtime). It includes a visible [MIT License](https://github.com/KkOma-value/persistent-web-skills-runtime/blob/main/LICENSE).
 
 ## Demo Video
 
@@ -131,13 +131,13 @@ The core application, tests, build, and a local interactive proof are ready. The
 
 ### Required submission fields
 
-- **Submitter Type:** TODO — confirm whether this is an `Individual`, `Team of Individuals`, or `Organization`.
+- **Submitter Type:** `Individual`.
 - **Country of residence of yourself and team members if applicable:** TODO — enter directly on Devpost after confirming eligibility; do not place private residence data in this repository.
 - **App Status:** Proposed answer: `New`. Please confirm this is correct. If the project existed before the submission period, select `Existing` and document the WebMCP work added during the submission period.
 - **If Existing, explain updates:** Leave blank only if `New` is confirmed. Otherwise, describe the meaningful WebMCP extension with dated evidence.
 - **Live URL:** TODO — add the deployed HTTPS URL.
 - **Testing instructions:** Use the testing instructions above; add credentials only if a future deployment requires them.
-- **Public code repository:** TODO — add the public, licensed repository URL after its visibility and license are confirmed.
+- **Public code repository:** https://github.com/KkOma-value/persistent-web-skills-runtime (public; MIT License).
 - **Which agents or clients did you test your WebMCP tools with?:** Google Chrome local demo, the Chrome MV3 extension path, and deterministic automated WebMCP runtime tests. The local demo verifies native `search_tasks()`, live `toolchange` synchronization, current-tool rebinding, semantic workflow reuse, result validation, and a v1 → v2 repair.
 - **Which AI tools have you leveraged?:** OpenAI Codex for planning, implementation, testing, and iteration; an OpenAI-compatible Responses API for optional server-side skill drafting and failed-step repair.
 - **Level of learning derived:** Proposed answer: `Significant`. TODO — confirm this is your answer.
