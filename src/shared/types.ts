@@ -33,8 +33,27 @@ export interface RegisteredWebMCPTool {
   handler?: (input: JsonObject) => unknown | Promise<unknown>;
 }
 
-export interface ModelContextLike extends EventTarget {
+export interface ModelContextLike {
   getTools(): Promise<RegisteredWebMCPTool[]>;
+  registerTool?: (
+    tool: RegisteredWebMCPTool,
+    options?: { signal?: AbortSignal },
+  ) => void | Promise<void>;
+  unregisterTool?: (name: string) => void | Promise<void>;
+  executeTool?: (
+    tool: RegisteredWebMCPTool,
+    input: string | JsonObject,
+    options?: { signal?: AbortSignal },
+  ) => unknown | Promise<unknown>;
+  codexExecuteTool?: unknown;
+  addEventListener?: (
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+  ) => void;
+  removeEventListener?: (
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+  ) => void;
 }
 
 export interface SemanticLocator {

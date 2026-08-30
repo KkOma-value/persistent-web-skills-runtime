@@ -80,18 +80,46 @@ export class WebMCPDiscovery {
     let timer: number | undefined;
     let attempts = 0;
     let attached = false;
+    let stopped = false;
+    let lastPollSignature: string | undefined;
 
     const handleToolChange = async () => {
       onChange(await this.discover());
     };
+    const poll = async () => {
+      if (stopped) return;
+      const result = await this.discover();
+      const signature = stableHash(
+        result.tools.map(({ name, description, inputSchema, hash }) => ({
+          name,
+          description,
+          inputSchema,
+          hash,
+        })),
+      );
+      if (lastPollSignature !== undefined && signature !== lastPollSignature) {
+        onChange(result);
+      }
+      lastPollSignature = signature;
+      timer = window.setTimeout(() => void poll(), 250);
+    };
     const attach = () => {
-      if (attached) return;
+      if (attached || stopped) return;
       context = getModelContext(this.doc);
       if (context) {
-        context.addEventListener("toolchange", handleToolChange);
         attached = true;
-        // A late modelContext should produce the same first snapshot as an early one.
-        if (!hadContextAtStart) void this.discover().then(onChange);
+        if (
+          typeof context.addEventListener === "function" &&
+          typeof context.removeEventListener === "function"
+        ) {
+          context.addEventListener("toolchange", handleToolChange);
+          // A late modelContext should produce the same first snapshot as an early one.
+          if (!hadContextAtStart) void this.discover().then(onChange);
+        } else {
+          // Some native browser implementations expose getTools/registerTool without
+          // EventTarget methods. Polling a compact tool signature preserves live sync.
+          void poll();
+        }
         return;
       }
       if (attempts < 20) {
@@ -101,8 +129,11 @@ export class WebMCPDiscovery {
     };
     attach();
     return () => {
+      stopped = true;
       if (timer !== undefined) window.clearTimeout(timer);
-      if (context && attached) context.removeEventListener("toolchange", handleToolChange);
+      if (context && attached && typeof context.removeEventListener === "function") {
+        context.removeEventListener("toolchange", handleToolChange);
+      }
     };
   }
 
@@ -120,11 +151,23 @@ export class WebMCPDiscovery {
     }
 
     const executor = currentTool.execute ?? currentTool.invoke ?? currentTool.handler;
-    if (!executor) {
-      throw new Error(`Native WebMCP tool \"${toolName}\" has no executable handler`);
+    if (executor) {
+      return executor.call(currentTool, input);
     }
-
-    return executor.call(currentTool, input);
+    if (typeof context.executeTool === "function") {
+      const nativeInput =
+        typeof context.codexExecuteTool === "function"
+          ? input
+          : JSON.stringify(input);
+      const result = await context.executeTool(currentTool, nativeInput);
+      if (typeof result !== "string") return result;
+      try {
+        return JSON.parse(result) as unknown;
+      } catch {
+        return result;
+      }
+    }
+    throw new Error(`Native WebMCP tool \"${toolName}\" has no executable handler`);
   }
 }
 

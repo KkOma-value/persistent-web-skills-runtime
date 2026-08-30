@@ -60,6 +60,44 @@ describe("WebMCP discovery", () => {
     });
   });
 
+  it("executes browser-native tools through executeTool when handlers are hidden", async () => {
+    const tool = { name: "create_task", description: "Create a task" };
+    const executeTool = vi.fn(async () => "native result");
+    const context: ModelContextLike = {
+      async getTools() {
+        return [tool];
+      },
+      executeTool,
+    };
+    const doc = document.implementation.createHTMLDocument("native-execution");
+    Object.defineProperty(doc, "modelContext", { value: context });
+
+    await expect(
+      new WebMCPDiscovery(doc).execute("create_task", { title: "Login bug" }),
+    ).resolves.toBe("native result");
+    expect(executeTool).toHaveBeenCalledWith(tool, '{"title":"Login bug"}');
+  });
+
+  it("uses object input for the Codex browser WebMCP adapter", async () => {
+    const tool = { name: "create_task" };
+    const executeTool = vi.fn(async () => '{"transport":"native-webmcp"}');
+    const context: ModelContextLike = {
+      async getTools() {
+        return [tool];
+      },
+      executeTool,
+      codexExecuteTool: vi.fn(),
+    };
+    const doc = document.implementation.createHTMLDocument("codex-native-execution");
+    Object.defineProperty(doc, "modelContext", { value: context });
+    const input = { title: "Login bug" };
+
+    await expect(new WebMCPDiscovery(doc).execute("create_task", input)).resolves.toEqual({
+      transport: "native-webmcp",
+    });
+    expect(executeTool).toHaveBeenCalledWith(tool, input);
+  });
+
   it("binds toolchange when a page exposes modelContext after document_start", async () => {
     vi.useFakeTimers();
     try {
@@ -75,6 +113,34 @@ describe("WebMCP discovery", () => {
       await vi.advanceTimersByTimeAsync(100);
       await Promise.resolve();
       expect(updates).toContain("late_tool");
+      stop();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("polls tool changes when a native context is not an EventTarget", async () => {
+    vi.useFakeTimers();
+    try {
+      const doc = document.implementation.createHTMLDocument("native-demo");
+      const tools: RegisteredWebMCPTool[] = [{ name: "search", execute: vi.fn() }];
+      const context: ModelContextLike = {
+        async getTools() {
+          return tools;
+        },
+      };
+      Object.defineProperty(doc, "modelContext", { value: context });
+      const updates: string[][] = [];
+      const discovery = new WebMCPDiscovery(doc);
+      const stop = discovery.subscribe((result) => {
+        updates.push(result.tools.map((tool) => tool.name));
+      });
+
+      await vi.advanceTimersByTimeAsync(250);
+      tools.push({ name: "create_task", execute: vi.fn() });
+      await vi.advanceTimersByTimeAsync(250);
+
+      expect(updates).toContainEqual(["search", "create_task"]);
       stop();
     } finally {
       vi.useRealTimers();

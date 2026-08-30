@@ -136,6 +136,7 @@ export function App() {
 
     return () => {
       orchestrator.destroy();
+      modelContext.dispose();
       registryRef.current.close();
     };
   }, [createTask]);
@@ -176,8 +177,8 @@ export function App() {
   const resetDemo = useCallback(async () => {
     await registryRef.current.clear();
     await orchestratorRef.current?.refreshSkills();
-    modelContextRef.current?.unregisterTool("create_task");
-    setNativeCreateRegistered(false);
+    await modelContextRef.current?.unregisterTool("create_task");
+    setNativeCreateRegistered(Boolean(modelContextRef.current?.has("create_task")));
     tasksRef.current = [];
     setTasks([]);
     setEvents([]);
@@ -237,10 +238,10 @@ export function App() {
     }
   };
 
-  const registerNativeCreate = () => {
+  const registerNativeCreate = async () => {
     const context = modelContextRef.current;
     if (!context || context.has("create_task")) return;
-    registerNativeCreateTask(context, {
+    await registerNativeCreateTask(context, {
       listTasks: () => tasksRef.current,
       createTask,
     });
@@ -302,7 +303,7 @@ export function App() {
             <span>▶</span> Run 90-sec demo
           </button>
           <button onClick={() => setBroken(true)} disabled={broken || running}>Break DOM</button>
-          <button onClick={registerNativeCreate} disabled={nativeCreateRegistered}>+ Native create_task</button>
+          <button onClick={() => void registerNativeCreate()} disabled={nativeCreateRegistered}>+ Native create_task</button>
           <button onClick={() => void runNativeSearch()} disabled={running}>Test native search</button>
           <button onClick={() => void resetDemo()} disabled={running}>Reset</button>
         </div>
